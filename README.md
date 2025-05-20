@@ -1,203 +1,152 @@
-# Student Management System - Lesson Guide
+# Student Management System - Project Report
 
-**Date and Time of Creation: 09:10 PM +07, Tuesday, May 20, 2025**
+**Submission Date and Time: 09:18 PM +07, Tuesday, May 20, 2025**  
+**Author: Kim Chhunkea**
 
-Welcome to the lesson guide for the Student Management System (SMS), a minimalist C-based application designed to manage student records. This README serves as a chapter-by-chapter breakdown of the project, explaining each file, its role, and the reasoning behind its implementation. Whether you're a beginner learning C programming or an experienced developer exploring modular design, this guide will walk you through the codebase step by step.
+## Introduction
+This project, the Student Management System (SMS), is a C-based console application developed as part of my programming coursework. The system manages student records with features such as adding, viewing, updating, and deleting students, generating grade reports, searching by name, and implementing user authentication. The design emphasizes modularity, zero-bug robustness, and cross-platform compatibility, achieved by separating functionality into individual files within a `student/` directory. This report outlines the project structure, explains each file's role, and reflects on the learning process and technical decisions.
 
-## Chapter 1: Project Overview
-The Student Management System is a console-based application that allows users to add, view, update, and delete student records, generate grade reports, search students by name, and manage user authentication. The system stores data persistently in text files and is designed with zero bugs, modularity, and cross-platform compatibility in mind. The project is split into multiple files for better organization and maintainability, housed in a `student/` directory, with a central header file (`student_management.h`) and main implementation files (`main.c` and `student_management.c`).
+## Project Objectives
+- Implement a functional student management system with persistent data storage.
+- Apply C programming concepts (structures, file I/O, input validation).
+- Practice modular design and code organization.
+- Ensure cross-platform compatibility (Windows and Unix-like systems).
+- Achieve zero bugs through rigorous validation and error handling.
 
-The key features include:
-- Adding new students with ID, name, and score.
-- Viewing and updating student details.
-- Deleting student records.
-- Generating pass/fail grade reports (score ≥ 5.0).
-- Searching students by name.
-- User authentication with updatable credentials stored in a file.
-- Persistent data storage in `./store/students_store.txt`.
-
-The codebase is written in C to leverage its performance and control, with a focus on simplicity and robustness. The modular structure allows for easy maintenance and future enhancements.
-
-## Chapter 2: Directory Structure
-The project is organized as follows:
+## System Architecture
+The project is organized into:
 - `student_management.h`: Central header file with definitions and prototypes.
-- `student_management.c`: Main implementation file that includes all function files.
-- `main.c`: Entry point with the menu-driven interface.
+- `student_management.c`: Main implementation file linking all functions.
+- `main.c`: Program entry point with the user interface.
 - `student/`: Directory containing individual function files.
-- `store/`: Directory for data files (`credentials.txt` and `students_store.txt`).
+- `store/`: Directory for data files (`credentials.txt`, `students_store.txt`).
 
-This structure separates concerns, making it easier to navigate and modify specific functionalities.
+This modular approach enhances maintainability and scalability, allowing each function to be developed, tested, and modified independently.
 
-## Chapter 3: File-by-File Explanation
+## Detailed File Analysis
 
-### 3.1 `student_management.h`
-- **Purpose**: This is the header file that defines constants, structures, and function prototypes used throughout the application. It acts as the interface between the main program and the implementation files.
-- **Content**:
-  - Includes standard C libraries (`stdio.h`, `stdlib.h`, `string.h`, `ctype.h`, `sys/stat.h`) for input/output, memory management, string handling, character testing, and directory operations.
-  - Defines constants like `MAX_STUDENTS` (100), `MAX_NAME_LENGTH` (50), and file paths (`CREDENTIALS_FILE`, `STUDENTS_FILE`).
-  - Declares `struct Student` (id, name, score) and `struct Credentials` (username, password).
-  - Lists all function prototypes and declares global variables (`students`, `student_count`, `creds`) as `extern`.
-- **Why Written This Way**:
-  - The header file centralizes project-wide definitions, ensuring consistency across files.
-  - Using `extern` for global variables allows them to be defined in one place (`student_management.c`) while being accessible everywhere.
-  - The inclusion of cross-platform libraries (`sys/stat.h` with conditional `mkdir`) ensures compatibility with Windows and Unix-like systems.
+### 1. `student_management.h`
+- **Role**: Defines constants (e.g., `MAX_STUDENTS = 100`), structures (`struct Student`, `struct Credentials`), and function prototypes. Declares global variables (`students`, `student_count`, `creds`) as `extern`.
+- **Learning Outcome**: Understanding header files as interfaces and the use of `extern` for global variable sharing.
+- **Design Rationale**: Centralizing definitions ensures consistency. Including `sys/stat.h` with conditional `mkdir` supports cross-platform directory creation.
 
-### 3.2 `student_management.c`
-- **Purpose**: This file serves as the main implementation hub, including all individual function files from the `student/` directory and defining global variables.
-- **Content**:
-  - Includes `student_management.h` and all `.c` files from the `student/` directory using relative paths (e.g., `student/clear_input_buffer.c`).
-  - Defines global variables: `students[MAX_STUDENTS]`, `student_count`, and `creds` with default values.
-- **Why Written This Way**:
-  - Including `.c` files directly (instead of compiling them separately) simplifies the build process for a small project, though a Makefile would be better for larger projects.
-  - Centralizing global variable definitions here avoids duplication and ensures a single point of initialization.
-  - The design leverages the modularity of the `student/` directory while keeping the build process straightforward.
+### 2. `student_management.c`
+- **Role**: Includes all `.c` files from the `student/` directory and defines global variables.
+- **Learning Outcome**: Grasping the importance of a main implementation file to coordinate modular components.
+- **Design Rationale**: Using `#include` for `.c` files simplifies the build for a small project, though a Makefile would be preferable for larger systems to compile files separately.
 
-### 3.3 `main.c`
-- **Purpose**: This is the entry point of the application, containing the main loop and menu interface.
-- **Content**:
-  - Includes `student_management.h`.
-  - Initializes the directory, loads credentials, authenticates the user, and loads student data.
-  - Implements a `do-while` loop with a switch-case for menu options (1-8) to call respective functions.
-  - Saves student data and exits on choice 8.
-- **Why Written This Way**:
-  - The menu-driven approach provides a user-friendly interface for all functionalities.
-  - The sequence (directory creation, authentication, data load) ensures the system is ready before user interaction.
-  - Using `validateNumericInput` for menu choice input ensures robust handling of user input.
+### 3. `main.c`
+- **Role**: Contains the `main()` function with a menu-driven loop (options 1-8) to invoke other functions. Handles initialization (directory, authentication, data load) and exit.
+- **Learning Outcome**: Mastering program flow control and user interface design in C.
+- **Design Rationale**: The menu structure provides an intuitive interface, while input validation via `validateNumericInput` ensures robustness.
 
-### 3.4 `student/clear_input_buffer.c`
-- **Purpose**: Clears the input buffer to prevent leftover characters from affecting subsequent inputs.
-- **Content**: Implements `clearInputBuffer()` using a `while` loop to consume characters until a newline or EOF.
-- **Why Written This Way**:
-  - Prevents buffer overflow issues common with `scanf` by ensuring the input stream is clean.
-  - Simple and efficient, using standard C input handling.
+### 4. `student/clear_input_buffer.c`
+- **Role**: Implements `clearInputBuffer()` to clear the input buffer.
+- **Learning Outcome**: Recognizing the need to manage input streams to avoid buffer overflow.
+- **Design Rationale**: A simple loop with `getchar()` efficiently handles residual input, critical after `scanf`-like operations.
 
-### 3.5 `student/validate_numeric_input.c`
-- **Purpose**: Validates integer input with a specified range and retries on invalid input.
-- **Content**: Implements `validateNumericInput()` with `fgets`, `sscanf`, and a loop to ensure the input is a number within `min` and `max`.
-- **Why Written This Way**:
-  - `fgets` avoids buffer overflow risks compared to `scanf("%d")`.
-  - The retry loop with feedback improves user experience by handling errors gracefully.
+### 5. `student/validate_numeric_input.c`
+- **Role**: Implements `validateNumericInput()` to validate integer input within a range.
+- **Learning Outcome**: Learning input validation and error handling loops.
+- **Design Rationale**: Using `fgets` and `sscanf` prevents buffer overflows, with retries improving user experience.
 
-### 3.6 `student/validate_float_input.c`
-- **Purpose**: Validates float input within a specified range with retries.
-- **Content**: Implements `validateFloatInput()` similarly to `validateNumericInput` but for floats.
-- **Why Written This Way**:
-  - Mirrors the integer validation for consistency and robustness.
-  - Ensures scores (e.g., 0.0-10.0) are within valid bounds.
+### 6. `student/validate_float_input.c`
+- **Role**: Implements `validateFloatInput()` for float validation.
+- **Learning Outcome**: Applying similar validation techniques to different data types.
+- **Design Rationale**: Consistent with integer validation, ensuring scores (0.0-10.0) are valid.
 
-### 3.7 `student/validate_string_input.c`
-- **Purpose**: Validates string input, trims whitespace, and ensures non-empty input.
-- **Content**: Implements `validateStringInput()` with `fgets`, whitespace trimming, and length checks.
-- **Why Written This Way**:
-  - `fgets` handles spaces in names (unlike `scanf("%s")`).
-  - Trimming and non-empty checks enhance data quality and user interaction.
+### 7. `student/validate_string_input.c`
+- **Role**: Implements `validateStringInput()` to validate and trim strings.
+- **Learning Outcome**: Understanding string handling and whitespace management.
+- **Design Rationale**: `fgets` supports names with spaces, and trimming enhances data quality.
 
-### 3.8 `student/check_duplicate_id.c`
-- **Purpose**: Checks for duplicate student IDs in the array.
-- **Content**: Implements `checkDuplicateID()` with a loop to compare IDs.
-- **Why Written This Way**:
-  - Ensures data integrity by preventing duplicate entries.
-  - Simple linear search is sufficient for the small dataset size (MAX_STUDENTS = 100).
+### 8. `student/check_duplicate_id.c`
+- **Role**: Implements `checkDuplicateID()` to prevent duplicate student IDs.
+- **Learning Outcome**: Implementing data integrity checks.
+- **Design Rationale**: A linear search suffices for the small array size, ensuring unique IDs.
 
-### 3.9 `student/create_store_directory.c`
-- **Purpose**: Creates the `store` directory if it doesn’t exist, cross-platform compatible.
-- **Content**: Implements `createStoreDirectory()` using `stat` and conditional `mkdir`.
-- **Why Written This Way**:
-  - Ensures the directory exists for file operations, avoiding runtime errors.
-  - The `#ifdef _WIN32` block handles OS differences effectively.
+### 9. `student/create_store_directory.c`
+- **Role**: Implements `createStoreDirectory()` to create the `store` directory.
+- **Learning Outcome**: Exploring file system operations and cross-platform coding.
+- **Design Rationale**: Conditional `mkdir` with `#ifdef _WIN32` ensures compatibility.
 
-### 3.10 `student/load_credentials.c`
-- **Purpose**: Loads username and password from `credentials.txt` or sets defaults.
-- **Content**: Implements `loadCredentials()` with file reading and string copying.
-- **Why Written This Way**:
-  - Persistent storage of credentials enhances security and usability.
-  - Default values with file creation ensure the system works out of the box.
+### 10. `student/load_credentials.c`
+- **Role**: Implements `loadCredentials()` to read credentials from `credentials.txt`.
+- **Learning Outcome**: Mastering file I/O and default value handling.
+- **Design Rationale**: Persistent credentials with defaults ensure usability.
 
-### 3.11 `student/save_credentials.c`
-- **Purpose**: Saves credentials to `credentials.txt`.
-- **Content**: Implements `saveCredentials()` with file writing and error handling.
-- **Why Written This Way**:
-  - Allows users to update credentials persistently.
-  - Exiting on error ensures data integrity.
+### 11. `student/save_credentials.c`
+- **Role**: Implements `saveCredentials()` to write credentials.
+- **Learning Outcome**: Understanding file writing and error handling.
+- **Design Rationale**: Saves changes and exits on failure to maintain integrity.
 
-### 3.12 `student/load_students.c`
-- **Purpose**: Loads student data from `students_store.txt`.
-- **Content**: Implements `loadStudents()` with file reading, validation, and array population.
-- **Why Written This Way**:
-  - Skips malformed or duplicate lines to maintain data integrity.
-  - Efficiently handles file-based persistence.
+### 12. `student/load_students.c`
+- **Role**: Implements `loadStudents()` to load student data.
+- **Learning Outcome**: Handling file-based data persistence.
+- **Design Rationale**: Skips invalid lines to ensure robustness.
 
-### 3.13 `student/save_students.c`
-- **Purpose**: Saves student data to `students_store.txt`.
-- **Content**: Implements `saveStudents()` with file writing.
-- **Why Written This Way**:
-  - Ensures data persistence before program exit.
-  - Error handling prevents silent failures.
+### 13. `student/save_students.c`
+- **Role**: Implements `saveStudents()` to save student data.
+- **Learning Outcome**: Practicing file output operations.
+- **Design Rationale**: Ensures data persistence with error checking.
 
-### 3.14 `student/add_student.c`
-- **Purpose**: Adds a new student with validation.
-- **Content**: Implements `addStudent()` with ID, name, and score input checks.
-- **Why Written This Way**:
-  - Comprehensive validation prevents invalid data.
-  - Capacity check avoids array overflow.
+### 14. `student/add_student.c`
+- **Role**: Implements `addStudent()` to add new students.
+- **Learning Outcome**: Combining validation and array management.
+- **Design Rationale**: Checks capacity and duplicates for data integrity.
 
-### 3.15 `student/show_students.c`
-- **Purpose**: Displays all student records.
-- **Content**: Implements `showStudents()` with a formatted loop.
-- **Why Written This Way**:
-  - Simple and clear output for user readability.
-  - Empty check avoids unnecessary processing.
+### 15. `student/show_students.c`
+- **Role**: Implements `showStudents()` to display records.
+- **Learning Outcome**: Formatting output for readability.
+- **Design Rationale**: Simple loop with empty check enhances usability.
 
-### 3.16 `student/update_student.c`
-- **Purpose**: Updates a student’s details by ID.
-- **Content**: Implements `updateStudent()` with search and validation.
-- **Why Written This Way**:
-  - Linear search is efficient for small datasets.
-  - Validation ensures data quality post-update.
+### 16. `student/update_student.c`
+- **Role**: Implements `updateStudent()` to modify records.
+- **Learning Outcome**: Implementing search and update logic.
+- **Design Rationale**: Linear search is efficient for small datasets.
 
-### 3.17 `student/delete_student.c`
-- **Purpose**: Deletes a student by ID.
-- **Content**: Implements `deleteStudent()` with search and array shifting.
-- **Why Written This Way**:
-  - Efficient deletion with minimal memory movement.
-  - Validation prevents invalid deletions.
+### 17. `student/delete_student.c`
+- **Role**: Implements `deleteStudent()` to remove records.
+- **Learning Outcome**: Understanding array manipulation.
+- **Design Rationale**: Shifting elements minimizes memory usage.
 
-### 3.18 `student/update_credentials.c`
-- **Purpose**: Updates user credentials.
-- **Content**: Implements `updateCredentials()` with input and saving.
-- **Why Written This Way**:
-  - Allows dynamic credential changes.
-  - Integrates with `saveCredentials` for persistence.
+### 18. `student/update_credentials.c`
+- **Role**: Implements `updateCredentials()` to change login details.
+- **Learning Outcome**: Integrating user input with file updates.
+- **Design Rationale**: Allows dynamic updates with persistence.
 
-### 3.19 `student/authenticate.c`
-- **Purpose**: Authenticates the user with 3 attempts.
-- **Content**: Implements `authenticate()` with input and comparison.
-- **Why Written This Way**:
-  - Limited attempts enhance security.
-  - Early exit on failure maintains system integrity.
+### 19. `student/authenticate.c`
+- **Role**: Implements `authenticate()` with 3 attempts.
+- **Learning Outcome**: Applying security concepts.
+- **Design Rationale**: Limited attempts enhance security.
 
-### 3.20 `student/generate_grade_report.c`
-- **Purpose**: Generates a pass/fail grade report.
-- **Content**: Implements `generateGradeReport()` with status logic.
-- **Why Written This Way**:
-  - Simple threshold (≥ 5.0) meets minimalist requirements.
-  - Extensible for future grading systems.
+### 20. `student/generate_grade_report.c`
+- **Role**: Implements `generateGradeReport()` for pass/fail status.
+- **Learning Outcome**: Creating conditional output.
+- **Design Rationale**: Simple threshold meets requirements, extensible for grades.
 
-### 3.21 `student/search_student_by_name.c`
-- **Purpose**: Searches students by name substring.
-- **Content**: Implements `searchStudentByName()` with `strstr`.
-- **Why Written This Way**:
-  - Substring search provides flexibility.
-  - Case-sensitive design keeps it simple, extensible for case-insensitive later.
+### 21. `student/search_student_by_name.c`
+- **Role**: Implements `searchStudentByName()` for name-based search.
+- **Learning Outcome**: Using string matching.
+- **Design Rationale**: `strstr` provides flexible substring search.
 
-## Chapter 4: Compilation and Usage
-- **Compilation**: Use `gcc -o student_management main.c student_management.c -I.` in the root directory.
-- **Usage**: Run `./student_management` (Unix) or `student_management.exe` (Windows). Log in with default credentials (`admin`/`password123`) or updated ones, then use the menu (1-8).
-- **Data Files**: Ensure `store/` exists with `credentials.txt` and `students_store.txt`.
+## Compilation and Execution
+- **Command**: `gcc -o student_management main.c student_management.c -I.`
+- **Run**: `./student_management` (Unix) or `student_management.exe` (Windows).
+- **Prerequisites**: Ensure `store/` exists with `credentials.txt` and `students_store.txt`.
 
-## Chapter 5: Future Enhancements
+## Reflection and Learning Outcomes
+This project deepened my understanding of:
+- C programming fundamentals (structures, pointers, file I/O).
+- Modular design and its benefits for code maintenance.
+- Input validation and error handling for robust software.
+- Cross-platform development using conditional compilation.
+Challenges included managing global variables and ensuring file compatibility, which I addressed through careful planning and testing.
+
+## Future Improvements
+- Implement a Makefile for separate compilation.
 - Add case-insensitive search or score filtering.
-- Implement a grading scale (e.g., A/B/C) in `generateGradeReport`.
-- Use a Makefile for separate compilation of `student/*.c` files.
+- Enhance `generateGradeReport` with a grading scale (e.g., A/B/C).
 
-This lesson guide provides a foundation for understanding and extending the Student Management System. Happy coding!
+## Conclusion
+The Student Management System demonstrates my ability to design, implement, and document a functional C application. I invite feedback to further refine my skills. Thank you for reviewing this project!
