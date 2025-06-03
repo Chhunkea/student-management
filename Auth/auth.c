@@ -16,8 +16,5 @@ int login() {
     fgets(password, 20, stdin);
     password[strcspn(password, "\n")] = 0; // Remove newline
 
-    if (strcmp(username, correctUsername) == 0 && strcmp(password, correctPassword) == 0) {
-        return 1; // Login successful
-    }
-    return 0; // Login failed
+    return 0;
 }
