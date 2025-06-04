@@ -32,7 +32,7 @@ NEW_FILE_OF_STUDENT_MANAGEMENT/
 
 To run tests, run the following command
 
-```bash
+```
   ./student_management
 ```
 
