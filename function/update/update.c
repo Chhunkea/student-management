@@ -12,13 +12,17 @@ void updateStudent(struct Student students[], int count) {
     scanf("%d", &id);
     clearInputBuffer();
 
+    // Search through the array to find the student with the matching ID
     for (int i = 0; i < count; i++) {
       if (students[i].id == id) {
         found = 1;
+
+        // Update the student's name, removing the newline character
         printf("Enter New Student Name: ");
         fgets(students[i].name, MAX_NAME, stdin);
         students[i].name[strcspn(students[i].name, "\n")] = 0;
 
+        // Update the student's age, clearing the input buffer afterward
         printf("Enter New Student Age: ");
         scanf("%d", &students[i].age);
         clearInputBuffer();
@@ -52,6 +56,7 @@ void updateStudent(struct Student students[], int count) {
             (students[i].math + students[i].science + students[i].english) /
             3.0;
 
+        // Save the updated student list to the file
         saveStudents(students, count);
         printf("Student info updated successfully!\n");
         return;

@@ -42,12 +42,15 @@ int main() {
 
     switch (choice) {
     case 1:
+      // Call function to add a new student
       addStudent(students, &count);
       break;
     case 2:
+      // Call function to display all students
       displayStudents(students, count);
       break;
     case 3:
+      // Check if there are students to update
       if (count == 0) {
         printf("\nNo students to update.\n");
       } else {
@@ -55,6 +58,7 @@ int main() {
       }
       break;
     case 4:
+      // Check if there are students to delete
       if (count == 0) {
         printf("\nNo students to delete.\n");
       } else {
@@ -62,12 +66,14 @@ int main() {
       }
       break;
     case 5:
+      // Prompt for filename and import students from the specified file
       printf("Enter the filename to import from: ");
       fgets(filename, 100, stdin);
       filename[strcspn(filename, "\n")] = 0;
       importStudentsFromFile(students, &count, filename);
       break;
     case 6:
+      // Check if there are students to search (ID-based)
       if (count == 0) {
         printf("\nNo students to search.\n");
       } else {
@@ -78,6 +84,7 @@ int main() {
       }
       break;
     case 7:
+      // Check if there are students to search (Province-based)
       if (count == 0) {
         printf("\nNo students to search.\n");
       } else {
@@ -88,9 +95,11 @@ int main() {
       }
       break;
     case 8:
+      // Exit the program gracefully
       printf("Exiting program.\n");
       return 0;
     default:
+      // Handle invalid menu choices with an error message
       printf("Invalid choice. Please try again.\n");
     }
   }

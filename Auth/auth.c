@@ -14,7 +14,7 @@ int login() {
 
   printf("Enter Password: ");
   fgets(password, 20, stdin);
-  password[strcspn(password, "\n")] = 0; // Remove newline
+  password[strcspn(password, "\n")] = 0; 
 
   if (strcmp(username, correctUsername) == 0 &&
       strcmp(password, correctPassword) == 0) {
