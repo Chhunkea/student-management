@@ -19,9 +19,38 @@ void updateStudent(struct Student students[], int count) {
         fgets(students[i].name, MAX_NAME, stdin);
         students[i].name[strcspn(students[i].name, "\n")] = 0;
 
-        printf("Enter New Student Grade (0-100): ");
-        scanf("%f", &students[i].grade);
+        printf("Enter New Student Age: ");
+        scanf("%d", &students[i].age);
         clearInputBuffer();
+
+        printf("Enter New Student Province: ");
+        fgets(students[i].province, MAX_PROVINCE, stdin);
+        students[i].province[strcspn(students[i].province, "\n")] = 0;
+
+        printf("Enter New Student Phone Number: ");
+        fgets(students[i].phone, MAX_PHONE, stdin);
+        students[i].phone[strcspn(students[i].phone, "\n")] = 0;
+
+        printf("Enter New Student Major: ");
+        fgets(students[i].major, MAX_MAJOR, stdin);
+        students[i].major[strcspn(students[i].major, "\n")] = 0;
+
+        printf("Enter New Math Grade (0-100): ");
+        scanf("%f", &students[i].math);
+        clearInputBuffer();
+
+        printf("Enter New Science Grade (0-100): ");
+        scanf("%f", &students[i].science);
+        clearInputBuffer();
+
+        printf("Enter New English Grade (0-100): ");
+        scanf("%f", &students[i].english);
+        clearInputBuffer();
+
+        // Calculate average
+        students[i].average =
+            (students[i].math + students[i].science + students[i].english) /
+            3.0;
 
         saveStudents(students, count);
         printf("Student info updated successfully!\n");
